@@ -23,6 +23,8 @@ public partial class CourierApiContext : DbContext
 
     public virtual DbSet<Company> Companys { get; set; }
 
+    public virtual DbSet<CompanyLocation> CompanyLocations { get; set; }
+
     public virtual DbSet<Customer> Customers { get; set; }
 
     public virtual DbSet<DeliveryCharge> DeliveryCharges { get; set; }
@@ -38,6 +40,8 @@ public partial class CourierApiContext : DbContext
     public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
 
     public virtual DbSet<Staff> Staffs { get; set; }
+
+    public virtual DbSet<UserDetail> UserDetails { get; set; }
 
     public virtual DbSet<Van> Vans { get; set; }
 
@@ -102,8 +106,20 @@ public partial class CourierApiContext : DbContext
         {
             entity.Property(e => e.CompanyId).HasColumnName("companyId");
             entity.Property(e => e.CompanyName).HasColumnName("companyName");
-            entity.Property(e => e.CreateBy).HasColumnName("createBy");
-            entity.Property(e => e.CreateDate).HasColumnName("createDate");
+        });
+
+        modelBuilder.Entity<CompanyLocation>(entity =>
+        {
+            entity.HasKey(e => e.LocationId).HasName("PK__CompanyL__E7FEA497D45056E9");
+
+            entity.ToTable("CompanyLocation");
+
+            entity.Property(e => e.LocationName).HasMaxLength(255);
+
+            entity.HasOne(d => d.Company).WithMany(p => p.CompanyLocations)
+                .HasForeignKey(d => d.CompanyId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CompanyLocation_Company");
         });
 
         modelBuilder.Entity<Customer>(entity =>
@@ -269,6 +285,20 @@ public partial class CourierApiContext : DbContext
             entity.HasOne(d => d.Designation).WithMany(p => p.Staff)
                 .HasForeignKey(d => d.DesignationId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+        });
+
+        modelBuilder.Entity<UserDetail>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("UserDetail");
+
+            entity.Property(e => e.PassWord)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.UserName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Van>(entity =>

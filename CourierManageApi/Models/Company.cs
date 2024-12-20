@@ -9,9 +9,7 @@ public partial class Company
 
     public string CompanyName { get; set; } = null!;
 
-    public string CreateBy { get; set; } = null!;
-
-    public DateTime CreateDate { get; set; }
-
     public virtual ICollection<Bank> Banks { get; set; } = new List<Bank>();
+
+    public virtual ICollection<CompanyLocation> CompanyLocations { get; set; } = new List<CompanyLocation>();
 }
