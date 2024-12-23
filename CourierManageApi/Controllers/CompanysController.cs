@@ -18,15 +18,6 @@ namespace CourierManageApi.Controllers
     [ApiController]
     public class ComapnysController : ControllerBase
     {
-        //private readonly CompanyDbContext _context;
-
-        //public Comapnys1Controller(CompanyDbContext context)
-        //{
-        //    _context = context;
-        //}
-
-        // GET: api/Comapnys
-        //[EnableCors("Policy1")]
         [HttpGet]
         //[AuthAttribute("GetComapnys", "Comapnys")]
         public async Task<ActionResult<IEnumerable<Company>>> GetComapnys()
@@ -119,3 +110,4 @@ namespace CourierManageApi.Controllers
         }
     }
 }
+

@@ -1,6 +1,6 @@
 //var builder = WebApplication.CreateBuilder(args);
 
-//// Add services to the container.
+////// Add services to the container.
 
 //builder.Services.AddControllers();
 //// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -20,90 +20,132 @@
 
 //app.UseAuthorization();
 
-//app.MapControllers();
+////app.MapControllers();
 
-//app.Run();
-
-
+////app.Run();
 
 
-//var builder = WebApplication.CreateBuilder(args);
 
-// CORS = cross origin request
-//var Policy1 = "Policy1";
-/*builder.Services.AddCors(options =>
-{
-    options.AddPolicy("Policy1",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:5041")
-                                .AllowAnyHeader()
-                                .AllowAnyMethod();
-        });
-});*/
-/*builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: Policy1,
-    builder =>
-    {
-        builder.WithOrigins("http://localhost:5041")
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials();
-    });
-});*/
 
-//builder.Services.AddCors(options =>
+////var builder = WebApplication.CreateBuilder(args);
+
+//// CORS = cross origin request
+////var Policy1 = "Policy1";
+///*builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("Policy1",
+//        policy =>
+//        {
+//            policy.WithOrigins("http://localhost:5041")
+//                                .AllowAnyHeader()
+//                                .AllowAnyMethod();
+//        });
+//});*/
+///*builder.Services.AddCors(options =>
 //{
 //    options.AddPolicy(name: Policy1,
-//      configurePolicy: policy =>
-//      {
-//          policy.WithOrigins("http://localhost:5041");
-//      });
+//    builder =>
+//    {
+//        builder.WithOrigins("http://localhost:5041")
+//        .AllowAnyHeader()
+//        .AllowAnyMethod()
+//        .AllowCredentials();
+//    });
+//});*/
+
+////builder.Services.AddCors(options =>
+////{
+////    options.AddPolicy(name: Policy1,
+////      configurePolicy: policy =>
+////      {
+////          policy.WithOrigins("http://localhost:5041");
+////      });
+////});
+
+//// Add services to the container.
+
+////builder.Services.AddControllers();
+
+////builder.Services.AddEndpointsApiExplorer();
+
+////var app = builder.Build();
+
+////app.UseHttpsRedirection();
+////app.UseStaticFiles();
+////app.UseRouting();
+
+////app.UseCors(Policy1);
+
+////app.UseAuthorization();
+
+////app.MapControllers();
+
+////app.Run();
+
+
+////var builder = WebApplication.CreateBuilder(args);
+
+//// Add services to the container.
+////builder.Services.AddControllers();
+
+//// Define a CORS policy
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("Policy1", policy =>
+//    {
+//        policy.AllowAnyOrigin()        // Allows any origin to access the API
+//              .AllowAnyMethod()        // Allows any HTTP method (GET, POST, etc.)
+//              .AllowAnyHeader();       // Allows any headers in the requests
+//    });
 //});
 
-// Add services to the container.
+////var app = builder.Build();
 
-//builder.Services.AddControllers();
-
-//builder.Services.AddEndpointsApiExplorer();
-
-//var app = builder.Build();
-
-//app.UseHttpsRedirection();
-//app.UseStaticFiles();
-//app.UseRouting();
-
-//app.UseCors(Policy1);
-
-//app.UseAuthorization();
+//// Use CORS policy globally (for all endpoints)
+//app.UseCors("Policy1");
 
 //app.MapControllers();
 
 //app.Run();
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 
-// Define a CORS policy
+// Add Swagger services.
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Add CORS policy.
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Policy1", policy =>
     {
-        policy.AllowAnyOrigin()        // Allows any origin to access the API
-              .AllowAnyMethod()        // Allows any HTTP method (GET, POST, etc.)
-              .AllowAnyHeader();       // Allows any headers in the requests
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
 });
 
 var app = builder.Build();
 
-// Use CORS policy globally (for all endpoints)
+// Enable Swagger in development.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    });
+}
+
+// Enable CORS globally.
 app.UseCors("Policy1");
 
+app.UseHttpsRedirection();
+app.UseAuthorization();
+
+// Map the controllers.
 app.MapControllers();
 
 app.Run();
