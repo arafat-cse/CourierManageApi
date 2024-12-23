@@ -11,36 +11,30 @@ using Microsoft.AspNetCore.Cors;
 
 namespace CourierManageApi.Controllers
 {
-
     [EnableCors("Policy1")]
     [AuthAttribute("", "Comapnys")]
     [Route("api/[controller]")]
     [ApiController]
-    public class ComapnysController : ControllerBase
+    public class CompanysController : ControllerBase
     {
-        //private readonly CompanyDbContext _context;
+        private readonly CourierApiContext _context;
 
-        //public Comapnys1Controller(CompanyDbContext context)
+        //public CompanysController(CourierApiContext context)
         //{
         //    _context = context;
         //}
 
-        // GET: api/Comapnys
-        //[EnableCors("Policy1")]
+        // GET: api/Companys
         [HttpGet]
-        //[AuthAttribute("GetComapnys", "Comapnys")]
-        public async Task<ActionResult<IEnumerable<Company>>> GetComapnys()
+        public async Task<ActionResult<IEnumerable<Company>>> GetCompanys()
         {
-            CourierApiContext _context = new CourierApiContext();
             return await _context.Companys.ToListAsync();
         }
 
-        // GET: api/Comapnys/5
-        //[EnableCors("Policy1")]
+        // GET: api/Companys/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Company>> GetCompany(int id)
         {
-            CourierApiContext _context = new CourierApiContext();
             var company = await _context.Companys.FindAsync(id);
 
             if (company == null)
@@ -51,12 +45,11 @@ namespace CourierManageApi.Controllers
             return company;
         }
 
-        // PUT: api/Comapnys/5
+        // PUT: api/Companys/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCompany(int id, Company company)
         {
-            CourierApiContext _context = new CourierApiContext();
             if (id != company.CompanyId)
             {
                 return BadRequest();
@@ -83,23 +76,21 @@ namespace CourierManageApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Comapnys
+        // POST: api/Companys
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Company>> PostCompany(Company company)
         {
-            CourierApiContext _context = new CourierApiContext();
             _context.Companys.Add(company);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCompany", new { id = company.CompanyId }, company);
         }
 
-        // DELETE: api/Comapnys/5
+        // DELETE: api/Companys/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCompany(int id)
         {
-            CourierApiContext _context = new CourierApiContext();
             var company = await _context.Companys.FindAsync(id);
             if (company == null)
             {
@@ -114,7 +105,6 @@ namespace CourierManageApi.Controllers
 
         private bool CompanyExists(int id)
         {
-            CourierApiContext _context = new CourierApiContext();
             return _context.Companys.Any(e => e.CompanyId == id);
         }
     }
